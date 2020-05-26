@@ -1,5 +1,9 @@
+html {
+    font-size: 16px;
+}
+
 body {
-    padding-left: 15px;
+    padding: 0px;
 }
 
 h1 a, h2 a {
@@ -19,8 +23,10 @@ h1 a, h2 a {
     text-decoration: none;
 }
 
-.content {
-    margin-left: 40px;
+.site-wrapper {
+    margin: 0;
+    margin-left: 310px;
+    padding: 100px 95px;
 }
 
 h1, h2, h3, h4 {
@@ -52,4 +58,168 @@ h1, h2, h3, h4 {
 
 .post h2 a, .post h2 a:visited {
     color: #000000;
+}
+
+.site-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 230px;
+}
+
+.site-logo-link {
+    padding: 60px 20px 60px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: block;
+    font-size: 3rem;
+    color: #333;
+    font-weight: 700;
+    line-height: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+#site-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    -webkit-box-shadow: 0 30px 50px 0 rgba(1, 1, 1, .2);
+    box-shadow: 0 30px 50px 0 rgba(1, 1, 1, .2);
+    width: 310px;
+    background-color: #fff;
+    z-index: 90;
+}
+
+#site-sidebar-flex {
+   
+    height: 100%;
+}
+
+.site-menu-ul, .site-social-icons {
+
+}
+
+.site-menu-ul {
+    font-family: 'Merriweather Sans', serif;
+    list-style: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    line-height: 1.4;
+    padding: 0;
+}
+
+.site-menu-ul li {
+    font-family: 'Merriweather Sans', serif;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    list-style-type: none;
+}
+
+.site-menu-ul li a {
+    position: relative;
+    display: block;
+    outline: none;
+    text-decoration: none;
+    color: #333;
+    padding: 0;
+    -webkit-transition: color 0.2s linear;
+    -moz-transition: color 0.2s linear;
+    transition: color 0.2s linear;
+}
+
+.site-menu-ul li a:hover {
+    outline: none;
+    color: #51cbce;
+}
+
+.site-social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #51cbce;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    width: 80%;
+}
+
+.site-social-icons li a {
+    padding: 0 25px 0 0;
+    color: #fff;
+    height: 55px;
+    line-height: 55px;
+}
+
+#site-social-inner {
+    padding: 0px 0px 30px 0px;
+}
+
+.site-social-icons li a .fa {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    transform: scale(1.1);
+    -webkit-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1);
+    -moz-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1);
+    -o-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1);
+    -ms-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1);
+    transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1);
+}
+
+.site-social-icons li:hover .fa {
+    -webkit-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+    transform: scale(1.4);
+}
+
+.post-card-left {
+    width: 61.8%;
+    padding: 3rem;
+}
+
+.post-card-left .card-body {
+    padding: 0;
+}
+
+.post-card-right {
+    width: 38.2%;
+}
+
+.post-card-right img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-category {
+    font-family: 'Merriweather Sans', serif;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #51cbce;
+}
+
+.card-category p {
+    margin: 0;
+}
+
+.card-title, .card-title a {
+    font-family: 'Merriweather Sans', serif;
+    margin: 0;
+    margin-bottom: 1.5rem;
+    color: #333333;
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.card-text {
+    font-weight: 400;
+    color: #444;
+    font-family: 'Merriweather', Georgia, serif;
+    line-height: 1.88;
+    font-size: 1rem;
 }
