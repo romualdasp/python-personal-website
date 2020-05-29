@@ -8,16 +8,35 @@
                 <div class="card-body">
                     <div class="card-category"><p>Programming in C/C++</p></div>
                     <h3 class="card-title"><a href="/">Programming in C/C++</a></h3>
-                    <p class="card-text">Mangoes are generally sweet, although the taste and texture of the flesh varies across cultivars; some, such as Alphonso, have a soft, pulpy, juicy texture similar to an overripe plum, while others, such as Tommy Atkins, are firmer, like a cantaloupe or avocado, with a fibrous texture.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <p class="card-text">Mangoes are generally sweet, although the taste and texture of the flesh varies across cultivars; some, such as Alphonso, have a soft, pulpy, juicy texture similar to an overripe plum, while others, such as Tommy Atkins, are firmer, like a cantaloupe or avocado, with a fibrous texture...</p>
+                    <p class="card-meta">Posted May 26, 2020</p>
                 </div>
             </div>
 
             <div class="post-card-right">
-                <img src="{% static 'images/processor.jpg' %}" class="card-img" alt="microcontrollers">
+                <img src="{% static 'images/processor.jpg' %}" class="card-img" alt="processor">
             </div>
         </div>
     </div>
+
+    {% for post in posts %}
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="post-card-left">
+                    <div class="card-body">
+                        <div class="card-category"><p>{{ post.category }}</p></div>
+                        <h3 class="card-title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+                        <p class="card-text">{{ post.text_snippet|linebreaksbr }}</p>
+                        <p class="card-meta">Posted {{ post.published_date|date:'DATE_FORMAT' }}</p>
+                    </div>
+                </div>
+
+                <div class="post-card-right">
+                    <img src="{{ post.image_url }}" class="card-img" alt="{{ post.title }}">
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
 <!--
     {% for post in posts %}

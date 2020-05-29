@@ -1,6 +1,25 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
 {% block content %}
+
+<div class="site-page-title">
+    <h1><span>Post Title Goes Here :^)</span></h1>
+    <div class="site-page-title-meta">
+        <div class="site-date-meta">Posted May 26, 2020</div>
+    </div>
+</div>
+
+<div class="site-featured-img">
+    <img src="{% static 'images/processor.jpg' %}" alt="processor" />
+</div>
+
+<div class="site-page-content">
+    <p>Dolore commodo ea excepteur, do irure praetermissum aut enim proident aut laboris, an lorem irure irure commodo. Iudicem culpa litteris ad enim eu mandaremus. Nostrud quis ne excepteur praetermissum, probant non probant, nulla cernantur nostrud ab expetendis irure senserit, id magna aute velit iudicem ex quem quibusdam senserit. Si nisi de aliqua, si mandaremus sed expetendis an ad labore cernantur domesticarum ne malis arbitror ad quae multos se nostrud e lorem occaecat, lorem senserit et sed ingeniis malis possumus, est irure offendit.</p>
+    <p>Dolore commodo ea excepteur, do irure praetermissum aut enim proident aut laboris, an lorem irure irure commodo. Iudicem culpa litteris ad enim eu mandaremus. Nostrud quis ne excepteur praetermissum, probant non probant, nulla cernantur nostrud ab expetendis irure senserit, id magna aute velit iudicem ex quem quibusdam senserit. Si nisi de aliqua, si mandaremus sed expetendis an ad labore cernantur domesticarum ne malis arbitror ad quae multos se nostrud e lorem occaecat, lorem senserit et sed ingeniis malis possumus, est irure offendit.</p>
+</div>
+
+<!--
     <div class="post">
         {% if post.published_date %}
             <div class="date">
@@ -18,4 +37,5 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
+-->
 {% endblock %}
