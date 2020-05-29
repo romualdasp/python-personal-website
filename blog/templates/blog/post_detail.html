@@ -3,39 +3,31 @@
 
 {% block content %}
 
-<div class="site-page-title">
-    <h1><span>Post Title Goes Here :^)</span></h1>
-    <div class="site-page-title-meta">
-        <div class="site-date-meta">Posted May 26, 2020</div>
+    <div class="site-page-title">
+        <h1><span>{{ post.title }}</span></h1>
+        <div class="site-page-title-meta">
+            {% if post.published_date %}
+                <div class="site-date-meta">Posted {{ post.published_date|date:'DATE_FORMAT' }}</div>
+            {% else %}
+                <div class="site-date-meta">Unpublished</div>
+            {% endif %}
+        </div>
     </div>
-</div>
 
-<div class="site-featured-img">
-    <img src="{% static 'images/processor.jpg' %}" alt="processor" />
-</div>
+    <div class="site-featured-img">
+        <img src="{{ post.image_url }}" alt="{{ post.title }}"/>
+    </div>
 
-<div class="site-page-content">
-    <p>Dolore commodo ea excepteur, do irure praetermissum aut enim proident aut laboris, an lorem irure irure commodo. Iudicem culpa litteris ad enim eu mandaremus. Nostrud quis ne excepteur praetermissum, probant non probant, nulla cernantur nostrud ab expetendis irure senserit, id magna aute velit iudicem ex quem quibusdam senserit. Si nisi de aliqua, si mandaremus sed expetendis an ad labore cernantur domesticarum ne malis arbitror ad quae multos se nostrud e lorem occaecat, lorem senserit et sed ingeniis malis possumus, est irure offendit.</p>
-    <p>Dolore commodo ea excepteur, do irure praetermissum aut enim proident aut laboris, an lorem irure irure commodo. Iudicem culpa litteris ad enim eu mandaremus. Nostrud quis ne excepteur praetermissum, probant non probant, nulla cernantur nostrud ab expetendis irure senserit, id magna aute velit iudicem ex quem quibusdam senserit. Si nisi de aliqua, si mandaremus sed expetendis an ad labore cernantur domesticarum ne malis arbitror ad quae multos se nostrud e lorem occaecat, lorem senserit et sed ingeniis malis possumus, est irure offendit.</p>
-</div>
-
-<!--
-    <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
-            </div>
-        {% else %}
-            <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-        {% endif %}
-
-        <h2>{{ post.title }}</h2>
+    <div class="site-page-content">
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
--->
+
+    {% if user.is_authenticated %}
+        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">Edit</a>
+        <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}">Remove</a>
+        {% if not post.published_date %}
+            <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+        {% endif %}
+    {% endif %}
+
 {% endblock %}
