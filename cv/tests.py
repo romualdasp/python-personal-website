@@ -16,6 +16,6 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         response = cv_preview(request)
         html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('\n<html>'))
+        self.assertTrue(html.strip().startswith('<html>'))
         self.assertIn('<title>Rmlds | Personal Website | University Coursework</title>', html)
-        self.assertTrue(html.endswith('</html>\n'))
+        self.assertTrue(html.strip().endswith('</html>'))
