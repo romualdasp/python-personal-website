@@ -3,8 +3,16 @@
 
 {% block content %}
     <h5 class="cv-title">Personal CV</h5>
-    <input id="new-skill" placeholder="Enter a new skill"/>
-    <ul id="skill-list"></ul>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <input name="skill_text" id="new-skill" placeholder="Enter a new skill"/>
+    </form>
+
+    <ul id="skill-list">
+        <li>{{ skill_text_var }}</li>
+    </ul>
+
     <p>Here goes the CV! Here goes the CV! Here goes the CV!</p>
     <p>YAY you opened the CV! YAY you opened the CV! YAY you opened the CV!</p>
     <img src="/static/images/none.jpg" alt="none" style="max-width: 100%;">

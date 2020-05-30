@@ -29,3 +29,8 @@ class HomePageTest(TestCase):
     def test_uses_cv_template(self):
         response = self.client.get('/cv/')
         self.assertTemplateUsed(response, 'cv/cv_preview.html')
+
+    def test_can_save_a_POST_request(self):
+        response = self.client.post('/cv/', data={'skill_text': 'New skill text'})
+        self.assertIn('New skill text', response.content.decode())
+        self.assertTemplateUsed(response, 'cv/cv_preview.html')
