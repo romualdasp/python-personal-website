@@ -13,6 +13,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):  
         self.browser.quit()
 
+    def check_for_li_in_skill_list(self, li_text):
+        ul = self.browser.find_element_by_id('skill-list')
+        list_items = ul.find_elements_by_tag_name('li')
+        self.assertIn(li_text, [li.text for li in list_items])
+
     def test_can_add_to_skill_list_and_retrieve_it_later(self):
         # Open homepage
         self.browser.get('http://127.0.0.1:8000/cv/')
@@ -39,15 +44,18 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        ul = self.browser.find_element_by_id('skill-list')
-        list_items = ul.find_elements_by_tag_name('li')
-        self.assertTrue(
-            any(li.text == 'Communication' for li in list_items),
-            'New skill did not appear in skill list'
-        )
+        self.check_for_li_in_skill_list('Communication')
 
         # We see a text box inviting us to add another item.
         # We enter 'Presentation'
+        inputbox = self.browser.find_element_by_id('new-skill')
+        inputbox.send_keys('Presentation')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        # The page updates again, and now shows both items in the list
+        self.check_for_li_in_skill_list('Communication')
+        self.check_for_li_in_skill_list('Presentation')
 
         self.fail('Finish the test!')
 
