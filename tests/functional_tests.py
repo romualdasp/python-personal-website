@@ -15,7 +15,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_add_to_skill_list_and_retrieve_it_later(self):
         # Open homepage
-        self.browser.get('http://127.0.0.1:8000')
+        self.browser.get('http://127.0.0.1:8000/cv/')
 
         # Check the page title
         self.assertIn('Rmlds | Personal Website | University Coursework', self.browser.title)
@@ -28,7 +28,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox = self.browser.find_element_by_id('new-skill')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
-            'Enter a skill'
+            'Enter a new skill'
         )
 
         # We type 'Communication'
@@ -42,7 +42,8 @@ class NewVisitorTest(unittest.TestCase):
         ul = self.browser.find_element_by_id('skill-list')
         list_items = ul.find_elements_by_tag_name('li')
         self.assertTrue(
-            any(li.text == 'Communication' for li in list_items)
+            any(li.text == 'Communication' for li in list_items),
+            'New skill did not appear in skill list'
         )
 
         # We see a text box inviting us to add another item.
