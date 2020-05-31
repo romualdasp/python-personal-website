@@ -3,6 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 
 from cv.views import cv_preview
+from cv.models import Skill
 
 # Create your tests here.
 
@@ -34,3 +35,21 @@ class HomePageTest(TestCase):
         response = self.client.post('/cv/', data={'skill_text': 'New skill text'})
         self.assertIn('New skill text', response.content.decode())
         self.assertTemplateUsed(response, 'cv/cv_preview.html')
+
+class SkillModelTest(TestCase):
+
+    def test_saving_and_retrieving_skills(self):
+        first_skill = Skill()
+        first_skill.text = 'The first skill'
+        first_skill.save()
+
+        second_skill = Skill()
+        second_skill.text = 'The second skill'
+        second_skill.save()
+
+        saved_skills = Skill.objects.all()
+        self.assertEqual(saved_skills.count(), 2)
+
+        self.assertEqual(saved_skills[0].text, 'The first skill')
+        self.assertEqual(saved_skills[1].text, 'The second skill')
+
