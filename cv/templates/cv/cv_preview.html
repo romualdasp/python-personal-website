@@ -10,7 +10,9 @@
     </form>
 
     <ul id="skill-list">
-        <li>{{ skill_text_var }}</li>
+        {% for skill in skills %}
+            <li>{{ skill.text }}</li>
+        {% endfor %}
     </ul>
 
     <p>Here goes the CV! Here goes the CV! Here goes the CV!</p>

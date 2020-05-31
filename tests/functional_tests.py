@@ -7,10 +7,10 @@ import unittest
 geckodriver_path = r'C:\Users\Romas\geckodriver\geckodriver.exe'
 
 class NewVisitorTest(unittest.TestCase):  
-    def setUp(self):  
+    def setUp(self):
         self.browser = webdriver.Firefox(executable_path=geckodriver_path)
 
-    def tearDown(self):  
+    def tearDown(self):
         self.browser.quit()
 
     def check_for_li_in_skill_list(self, li_text):
@@ -42,7 +42,7 @@ class NewVisitorTest(unittest.TestCase):
         # When we hit enter, the page updates, and now the page lists
         # 'Communication' as an item in a skill list
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
 
         self.check_for_li_in_skill_list('Communication')
 
@@ -51,7 +51,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox = self.browser.find_element_by_id('new-skill')
         inputbox.send_keys('Presentation')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
 
         # The page updates again, and now shows both items in the list
         self.check_for_li_in_skill_list('Communication')
