@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 
 from cv.views import cv_preview
-from cv.models import Skill, Education
+from cv.models import Skill, Education, Achievement, Course
 
 # Create your tests here.
 
@@ -70,3 +70,30 @@ class EducationModelTest(TestCase):
         self.assertEqual(saved_educations[1].title, 'The second education')
         self.assertEqual(saved_educations[1].date, '2020')
         self.assertEqual(saved_educations[1].description, 'second')
+
+class AchievementModelTest(TestCase):
+
+    def test_saving_and_retrieving_achievements(self):
+        Achievement.objects.create(title='The first achievement', date='2016')
+        Achievement.objects.create(title='The second achievement', date='2019')
+
+        saved_achievements = Achievement.objects.all()
+        self.assertEqual(saved_achievements.count(), 2)
+
+        self.assertEqual(saved_achievements[0].title, 'The first achievement')
+        self.assertEqual(saved_achievements[0].date, '2016')
+
+        self.assertEqual(saved_achievements[1].title, 'The second achievement')
+        self.assertEqual(saved_achievements[1].date, '2019')
+
+class CourseModelTest(TestCase):
+
+    def test_saving_and_retrieving_achievements(self):
+        Course.objects.create(title='The first course')
+        Course.objects.create(title='The second course')
+
+        saved_courses = Course.objects.all()
+        self.assertEqual(saved_courses.count(), 2)
+
+        self.assertEqual(saved_courses[0].title, 'The first course')
+        self.assertEqual(saved_courses[1].title, 'The second course')
