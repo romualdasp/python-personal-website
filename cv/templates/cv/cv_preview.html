@@ -4,7 +4,7 @@
 {% block content %}
     <h5 class="cv-title">Personal CV</h5>
     
-    <form method="POST" action="{% url 'cv_preview' %}">
+    <form method="POST" action="{% url 'skill_new' %}">
         {% csrf_token %}
         <input name="skill_text" id="new-skill" placeholder="Enter a new skill"/>
     </form>
