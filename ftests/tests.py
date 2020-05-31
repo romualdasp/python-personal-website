@@ -1,3 +1,4 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -6,7 +7,7 @@ import unittest
 
 geckodriver_path = r'C:\Users\Romas\geckodriver\geckodriver.exe'
 
-class NewVisitorTest(unittest.TestCase):  
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(executable_path=geckodriver_path)
 
@@ -20,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_add_to_skill_list_and_retrieve_it_later(self):
         # Open homepage
-        self.browser.get('http://127.0.0.1:8000/cv/')
+        self.browser.get(self.live_server_url + '/cv/')
 
         # Check the page title
         self.assertIn('Rmlds | Personal Website | University Coursework', self.browser.title)
@@ -58,6 +59,3 @@ class NewVisitorTest(unittest.TestCase):
         self.check_for_li_in_skill_list('Presentation')
 
         self.fail('Finish the test!')
-
-if __name__ == '__main__':  
-    unittest.main(warnings='ignore')  
