@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from cv.models import Skill
 from django.http import HttpResponse
 
@@ -11,6 +11,11 @@ def cv_preview(request):
 
     skills = Skill.objects.all()
     return render(request, 'cv/cv_preview.html', {'skills': skills})
+
+def skill_remove(request, pk):
+    skill = get_object_or_404(Skill, pk=pk)
+    skill.delete()
+    return redirect('cv_preview')
 
 def clear_db(request):
     Skill.objects.all().delete()

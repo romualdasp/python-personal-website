@@ -1,3 +1,4 @@
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -7,7 +8,7 @@ import unittest
 
 geckodriver_path = r'C:\Users\Romas\geckodriver\geckodriver.exe'
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(executable_path=geckodriver_path)
 
