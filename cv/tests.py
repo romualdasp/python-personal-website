@@ -3,58 +3,70 @@ from django.urls import resolve
 from django.http import HttpRequest
 
 from cv.views import cv_preview
-from cv.models import Skill
+from cv.models import Skill, Education
 
 # Create your tests here.
 
-class HomePageTest(TestCase):
+class SkillPagesTest(TestCase):
 
-    # Testing using Django Test Client
+    def test_uses_correct_template(self):
+        response = self.client.get('/cv/skill/new/')
+        self.assertTemplateUsed(response, 'cv/cv_new.html')
 
-    def test_uses_cv_template(self):
-        response = self.client.get('/cv/')
-        self.assertTemplateUsed(response, 'cv/cv_preview.html')
-
-    def test_can_save_a_POST_request(self):
-        response = self.client.post('/cv/', data={'skill_text': 'New skill text'})
+    def test_saves_POST_request(self):
+        response = self.client.post('/cv/skill/new/', data={
+            'title': 'saves_POST_request'
+        })
 
         self.assertEqual(Skill.objects.count(), 1)
-        new_skill = Skill.objects.first()
-        self.assertEqual(new_skill.text, 'New skill text')
+        self.assertEqual(Skill.objects.first().title, 'saves_POST_request')
 
     def test_redirects_after_POST(self):
-        response = self.client.post('/cv/', data={'skill_text': 'New skill text'})
+        response = self.client.post('/cv/skill/new/', data={
+            'title': 'redirects_after_POST'
+        })
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/cv/')
 
     def test_only_saves_items_when_necessary(self):
-        self.client.get('/cv/')
+        self.client.get('/cv/skill/new/')
         self.assertEqual(Skill.objects.count(), 0)
 
     def test_displays_all_items(self):
-        Skill.objects.create(text='itemey 1')
-        Skill.objects.create(text='itemey 2')
+        Skill.objects.create(title='all_items 1')
+        Skill.objects.create(title='all_items 2')
 
         response = self.client.get('/cv/')
 
-        self.assertIn('itemey 1', response.content.decode())
-        self.assertIn('itemey 2', response.content.decode())
+        self.assertIn('all_items 1', response.content.decode())
+        self.assertIn('all_items 2', response.content.decode())
 
 class SkillModelTest(TestCase):
 
     def test_saving_and_retrieving_skills(self):
-        first_skill = Skill()
-        first_skill.text = 'The first skill'
-        first_skill.save()
-
-        second_skill = Skill()
-        second_skill.text = 'The second skill'
-        second_skill.save()
+        Skill.objects.create(title='The first skill')
+        Skill.objects.create(title='The second skill')
 
         saved_skills = Skill.objects.all()
         self.assertEqual(saved_skills.count(), 2)
 
-        self.assertEqual(saved_skills[0].text, 'The first skill')
-        self.assertEqual(saved_skills[1].text, 'The second skill')
+        self.assertEqual(saved_skills[0].title, 'The first skill')
+        self.assertEqual(saved_skills[1].title, 'The second skill')
 
+class EducationModelTest(TestCase):
+
+    def test_saving_and_retrieving_educations(self):
+        Education.objects.create(title='The first education', date='2018', description='first')
+        Education.objects.create(title='The second education', date='2020', description='second')
+
+        saved_educations = Education.objects.all()
+        self.assertEqual(saved_educations.count(), 2)
+
+        self.assertEqual(saved_educations[0].title, 'The first education')
+        self.assertEqual(saved_educations[0].date, '2018')
+        self.assertEqual(saved_educations[0].description, 'first')
+
+        self.assertEqual(saved_educations[1].title, 'The second education')
+        self.assertEqual(saved_educations[1].date, '2020')
+        self.assertEqual(saved_educations[1].description, 'second')
