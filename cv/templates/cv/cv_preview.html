@@ -2,20 +2,37 @@
 {% load static %}
 
 {% block content %}
-    <h5 class="cv-title">Personal CV</h5>
-    
-    <form method="POST" action="{% url 'skill_new' %}">
-        {% csrf_token %}
-        <input name="skill_text" id="new-skill" placeholder="Enter a new skill"/>
-    </form>
-
+    <h5 class="cv-title">Skills</h5>
     <ul id="skill-list">
         {% for skill in skills %}
-            <li>{{ skill.text }} <a href="{% url 'skill_remove' pk=skill.pk %}"><i class="fa fa-times"></i></a></li>
+            <li>{{ skill.title }} <a href="{% url 'skill_remove' pk=skill.pk %}"><i class="fa fa-times"></i></a></li>
         {% endfor %}
     </ul>
+    <a class="btn btn-default" href="{% url 'skill_new' %}">Add skill</a>
 
-    <p>Here goes the CV! Here goes the CV! Here goes the CV!</p>
-    <p>YAY you opened the CV! YAY you opened the CV! YAY you opened the CV!</p>
+    <h5 class="cv-title">Education</h5>
+    <ul id="education-list">
+        {% for ed in educations %}
+            <li>{{ ed.title }} <a href="{% url 'education_remove' pk=ed.pk %}"><i class="fa fa-times"></i></a></li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-default" href="{% url 'education_new' %}">Add education</a>
+
+    <h5 class="cv-title">Achievements</h5>
+    <ul id="achievement-list">
+        {% for ac in achievements %}
+            <li>{{ ac.title }} <a href="{% url 'achievement_remove' pk=ac.pk %}"><i class="fa fa-times"></i></a></li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-default" href="{% url 'achievement_new' %}">Add achievement</a>
+
+    <h5 class="cv-title">Courses</h5>
+    <ul id="course-list">
+        {% for course in courses %}
+            <li>{{ course.title }} <a href="{% url 'course_remove' pk=course.pk %}"><i class="fa fa-times"></i></a></li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-default" href="{% url 'course_new' %}">Add course</a>
+
     <img src="/static/images/none.jpg" alt="none" style="max-width: 100%;">
 {% endblock %}
