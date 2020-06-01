@@ -37,7 +37,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox.send_keys(text)
 
     def hit_enter(self):
-        inputbox = self.browser.find_element_by_tag_name('body')
+        inputbox = self.browser.find_element_by_id('id_title')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(2)
 
@@ -54,7 +54,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
                 break
         time.sleep(2)
 
-    def test_can_add_to_skill_list_and_retrieve_it_later(self):
+    def check_add_to_list_then_retrieve_then_delete(self, header, add_button, curr_list, data):
         # Open homepage
         self.browser.get(self.live_server_url + '/cv/')
 
@@ -62,36 +62,84 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('Rmlds | Personal Website | University Coursework', self.browser.title)
 
         # Check the header exists
-        self.check_header_exists('Skills') # Education, Achievements, Courses
+        self.check_header_exists(header)
 
-        # We click a button to enter a new skill
-        self.click_button('add-skill')
+        # We click a button to add a new item, new page opens up
+        self.click_button(add_button)
 
-        # We type 'Communication'
-        self.populate_field('id_title', 'Communication')
+        # We fill out the form
+        for field in data[0]:
+            self.populate_field('id_' + field, data[0][field])
 
-        # When we hit enter, the page redirects, and now it lists
-        # 'Communication' as an item in a skill list
+        # When we hit enter, the page redirects, and now it has
+        # the previously added item in the list
         self.hit_enter()
 
-        self.check_item_in_list('Communication', 'skill-list')
+        self.check_item_in_list(data[0]['title'], curr_list)
 
-        # We click a button to add another item
-        self.click_button('add-skill')
+        # We click a button to add another item, new page opens up
+        self.click_button(add_button)
 
-        # We type 'Presentation' and hit enter
-        self.populate_field('id_title', 'Presentation')
+        # We fill out the form again
+        for field in data[1]:
+            self.populate_field('id_' + field, data[1][field])
         self.hit_enter()
 
         # The page redirects, and now shows both items in the list
-        self.check_item_in_list('Communication', 'skill-list')
-        self.check_item_in_list('Presentation', 'skill-list')
+        self.check_item_in_list(data[0]['title'], curr_list)
+        self.check_item_in_list(data[1]['title'], curr_list)
 
-        # We click delete next to 'Communication'
-        self.delete_item_in_list('Communication', 'skill-list')
+        # We click delete next to the first item, page reloads
+        self.delete_item_in_list(data[0]['title'], curr_list)
 
         # The item is deleted and no longer in the list
-        self.check_item_not_in_list('Communication', 'skill-list')
-        self.check_item_in_list('Presentation', 'skill-list')
+        self.check_item_not_in_list(data[0]['title'], curr_list)
+        self.check_item_in_list(data[1]['title'], curr_list)
 
-        self.fail('YAY everything works! :)')
+    def test_can_add_to_skill_list_then_retrieve_then_delete(self):
+
+        data=[{"title": "Awesome1",}, {"title": "Awesome2",}]
+        
+        self.check_add_to_list_then_retrieve_then_delete(
+            'Skills',
+            'add-skill',
+            'skill-list',
+            data
+        )
+
+    def test_can_add_to_education_list_then_retrieve_then_delete(self):
+
+        data=[
+            {"title": "TheEducation1", "date": "2018", "description": "e1"}, 
+            {"title": "TheEducation2", "date": "2020", "description": "e2"}]
+        
+        self.check_add_to_list_then_retrieve_then_delete(
+            'Education',
+            'add-education',
+            'education-list',
+            data
+        )
+
+    def test_can_add_to_achievement_list_then_retrieve_then_delete(self):
+
+        data=[
+            {"title": "Achievement1", "date": "2015"},
+            {"title": "Achievement2", "date": "2019"}]
+        
+        self.check_add_to_list_then_retrieve_then_delete(
+            'Achievements',
+            'add-achievement',
+            'achievement-list',
+            data
+        )
+
+    def test_can_add_to_course_list_then_retrieve_then_delete(self):
+
+        data=[{"title": "BestCourse1",}, {"title": "BestCourse2",}]
+        
+        self.check_add_to_list_then_retrieve_then_delete(
+            'Courses',
+            'add-course',
+            'course-list',
+            data
+        )
