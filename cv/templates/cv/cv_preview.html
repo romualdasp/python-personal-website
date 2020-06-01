@@ -2,29 +2,32 @@
 {% load static %}
 
 {% block content %}
-    <h5 class="cv-title">Skills</h5>
-    <ul id="skill-list">
+    <h5 class="cv-title"><span>Hi there!</span></h5>
+    <p class="cv-about">Hi, my name is Romualdas Paskevicius! I am currently studying Computer Science at the University of Birmingham. I love coding and building websites! Some of my strengths are web development, game development and high performance programming in C/C++!</p>
+
+    <h5 class="cv-title"><span>Skills</span></h5>
+    <ul id="skill-list" class="cv-list">
         {% for skill in skills %}
             <li>{{ skill.title }} <a href="{% url 'skill_remove' pk=skill.pk %}"><i class="fa fa-times"></i></a></li>
         {% endfor %}
     </ul>
 
-    <h5 class="cv-title">Education</h5>
-    <ul id="education-list">
+    <h5 class="cv-title"><span>Education</span></h5>
+    <ul id="education-list" class="cv-list">
         {% for ed in educations %}
             <li>{{ ed.title }} <a href="{% url 'education_remove' pk=ed.pk %}"><i class="fa fa-times"></i></a></li>
         {% endfor %}
     </ul>
 
-    <h5 class="cv-title">Achievements</h5>
-    <ul id="achievement-list">
+    <h5 class="cv-title"><span>Achievements</span></h5>
+    <ul id="achievement-list" class="cv-list">
         {% for ac in achievements %}
             <li>{{ ac.title }} <a href="{% url 'achievement_remove' pk=ac.pk %}"><i class="fa fa-times"></i></a></li>
         {% endfor %}
     </ul>
 
-    <h5 class="cv-title">Courses</h5>
-    <ul id="course-list">
+    <h5 class="cv-title"><span>Courses</span></h5>
+    <ul id="course-list" class="cv-list">
         {% for course in courses %}
             <li>{{ course.title }} <a href="{% url 'course_remove' pk=course.pk %}"><i class="fa fa-times"></i></a></li>
         {% endfor %}
@@ -36,7 +39,5 @@
     <a class="btn btn-default" href="{% url 'course_new' %}" id="add-course">Add course</a>
 
     {% if user.is_authenticated %}{% endif %}
-
-    <img src="/static/images/none.jpg" alt="none" style="max-width: 100%;">
 
 {% endblock %}
