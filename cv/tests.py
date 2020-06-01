@@ -146,8 +146,8 @@ class AchievementPagesTest(TestCase):
         self.assertEqual(Achievement.objects.count(), 0)
 
     def test_displays_all_items(self):
-        Achievement.objects.create(title='displays_all_items 1', date=2015, description='desc 1')
-        Achievement.objects.create(title='displays_all_items 2', date=2016, description='desc 2')
+        Achievement.objects.create(title='displays_all_items 1', date=2015)
+        Achievement.objects.create(title='displays_all_items 2', date=2016)
 
         response = self.client.get('/cv/')
 
@@ -168,6 +168,43 @@ class AchievementModelTest(TestCase):
 
         self.assertEqual(saved_achievements[1].title, 'The second achievement')
         self.assertEqual(saved_achievements[1].date, '2019')
+
+class CoursePagesTest(TestCase):
+
+    def test_uses_correct_template(self):
+        response = self.client.get('/cv/course/new/')
+        self.assertTemplateUsed(response, 'cv/cv_new.html')
+
+    def test_saves_POST_request(self):
+        response = self.client.post('/cv/course/new/', data={
+            'title': 'saves_POST_request title',
+        })
+
+        self.assertEqual(Course.objects.count(), 1)
+
+        saved = Course.objects.first()
+        self.assertEqual(saved.title, 'saves_POST_request title')
+
+    def test_redirects_after_POST(self):
+        response = self.client.post('/cv/course/new/', data={
+            'title': 'redirects_after_POST title',
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/cv/')
+
+    def test_only_saves_items_when_necessary(self):
+        self.client.get('/cv/course/new/')
+        self.assertEqual(Course.objects.count(), 0)
+
+    def test_displays_all_items(self):
+        Course.objects.create(title='displays_all_items 1')
+        Course.objects.create(title='displays_all_items 2')
+
+        response = self.client.get('/cv/')
+
+        self.assertIn('displays_all_items 1', response.content.decode())
+        self.assertIn('displays_all_items 2', response.content.decode())
 
 class CourseModelTest(TestCase):
 
