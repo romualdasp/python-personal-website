@@ -34,13 +34,13 @@ class SkillPagesTest(TestCase):
         self.assertEqual(Skill.objects.count(), 0)
 
     def test_displays_all_items(self):
-        Skill.objects.create(title='all_items 1')
-        Skill.objects.create(title='all_items 2')
+        Skill.objects.create(title='displays_all_items 1')
+        Skill.objects.create(title='displays_all_items 2')
 
         response = self.client.get('/cv/')
 
-        self.assertIn('all_items 1', response.content.decode())
-        self.assertIn('all_items 2', response.content.decode())
+        self.assertIn('displays_all_items 1', response.content.decode())
+        self.assertIn('displays_all_items 2', response.content.decode())
 
 class SkillModelTest(TestCase):
 
@@ -53,6 +53,49 @@ class SkillModelTest(TestCase):
 
         self.assertEqual(saved_skills[0].title, 'The first skill')
         self.assertEqual(saved_skills[1].title, 'The second skill')
+
+class EducationPagesTest(TestCase):
+
+    def test_uses_correct_template(self):
+        response = self.client.get('/cv/education/new/')
+        self.assertTemplateUsed(response, 'cv/cv_new.html')
+
+    def test_saves_POST_request(self):
+        response = self.client.post('/cv/education/new/', data={
+            'title': 'saves_POST_request title',
+            'date': 'saves_POST_request date',
+            'description': 'saves_POST_request desc',
+        })
+
+        self.assertEqual(Education.objects.count(), 1)
+
+        saved = Education.objects.first()
+        self.assertEqual(saved.title, 'saves_POST_request title')
+        self.assertEqual(saved.date, 'saves_POST_request date')
+        self.assertEqual(saved.description, 'saves_POST_request desc')
+
+    def test_redirects_after_POST(self):
+        response = self.client.post('/cv/education/new/', data={
+            'title': 'redirects_after_POST title',
+            'date': 'redirects_after_POST date',
+            'description': 'redirects_after_POST desc',
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/cv/')
+
+    def test_only_saves_items_when_necessary(self):
+        self.client.get('/cv/education/new/')
+        self.assertEqual(Education.objects.count(), 0)
+
+    def test_displays_all_items(self):
+        Education.objects.create(title='displays_all_items 1', date=2010, description='desc 1')
+        Education.objects.create(title='displays_all_items 2', date=2012, description='desc 2')
+
+        response = self.client.get('/cv/')
+
+        self.assertIn('displays_all_items 1', response.content.decode())
+        self.assertIn('displays_all_items 2', response.content.decode())
 
 class EducationModelTest(TestCase):
 
