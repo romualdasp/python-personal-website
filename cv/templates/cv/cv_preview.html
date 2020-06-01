@@ -31,9 +31,9 @@
     </ul>
 
     <a class="btn btn-default" href="{% url 'skill_new' %}" id="add-skill">Add skill</a>
-    <a class="btn btn-default" href="{% url 'education_new' %}">Add education</a>
-    <a class="btn btn-default" href="{% url 'achievement_new' %}">Add achievement</a>
-    <a class="btn btn-default" href="{% url 'course_new' %}">Add course</a>
+    <a class="btn btn-default" href="{% url 'education_new' %}" id="add-education">Add education</a>
+    <a class="btn btn-default" href="{% url 'achievement_new' %}" id="add-achievement">Add achievement</a>
+    <a class="btn btn-default" href="{% url 'course_new' %}" id="add-course">Add course</a>
 
     {% if user.is_authenticated %}{% endif %}
 

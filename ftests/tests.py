@@ -65,4 +65,4 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.check_for_item_in_list('Communication', 'skill-list')
         self.check_for_item_in_list('Presentation', 'skill-list')
 
-        self.fail('YAY everything works!')
+        # self.fail('YAY everything works! :)')
