@@ -158,6 +158,4 @@ class AchievementModelTest(TestCase, SharedModelTest):
 class CourseModelTest(TestCase, SharedModelTest):
 
     _ModelUsed = Course
-    data = [
-        {'title': 'The first course'},
-        {'title': 'The second course'}]
+    data = [{'title': 'The first course'}, {'title': 'The second course'}]
