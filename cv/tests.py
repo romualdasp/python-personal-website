@@ -114,6 +114,46 @@ class EducationModelTest(TestCase):
         self.assertEqual(saved_educations[1].date, '2020')
         self.assertEqual(saved_educations[1].description, 'second')
 
+class AchievementPagesTest(TestCase):
+
+    def test_uses_correct_template(self):
+        response = self.client.get('/cv/achievement/new/')
+        self.assertTemplateUsed(response, 'cv/cv_new.html')
+
+    def test_saves_POST_request(self):
+        response = self.client.post('/cv/achievement/new/', data={
+            'title': 'saves_POST_request title',
+            'date': 'saves_POST_request date',
+        })
+
+        self.assertEqual(Achievement.objects.count(), 1)
+
+        saved = Achievement.objects.first()
+        self.assertEqual(saved.title, 'saves_POST_request title')
+        self.assertEqual(saved.date, 'saves_POST_request date')
+
+    def test_redirects_after_POST(self):
+        response = self.client.post('/cv/achievement/new/', data={
+            'title': 'redirects_after_POST title',
+            'date': 'redirects_after_POST date',
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/cv/')
+
+    def test_only_saves_items_when_necessary(self):
+        self.client.get('/cv/achievement/new/')
+        self.assertEqual(Achievement.objects.count(), 0)
+
+    def test_displays_all_items(self):
+        Achievement.objects.create(title='displays_all_items 1', date=2015, description='desc 1')
+        Achievement.objects.create(title='displays_all_items 2', date=2016, description='desc 2')
+
+        response = self.client.get('/cv/')
+
+        self.assertIn('displays_all_items 1', response.content.decode())
+        self.assertIn('displays_all_items 2', response.content.decode())
+
 class AchievementModelTest(TestCase):
 
     def test_saving_and_retrieving_achievements(self):
