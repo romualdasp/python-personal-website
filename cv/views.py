@@ -14,35 +14,35 @@ def cv_preview(request):
         'courses': Course.objects.all(),
     })
 
-@login_required
+#@login_required
 def skill_new(request):
     return cv_new(request, SkillForm)
 
-@login_required
+#@login_required
 def skill_remove(request, pk):
     return cv_remove(request, Skill, pk)
 
-@login_required
+#@login_required
 def education_new(request):
     return cv_new(request, EducationForm)
 
-@login_required
+#@login_required
 def education_remove(request, pk):
     return cv_remove(request, Education, pk)
 
-@login_required
+#@login_required
 def achievement_new(request):
     return cv_new(request, AchievementForm)
 
-@login_required
+#@login_required
 def achievement_remove(request, pk):
     return cv_remove(request, Achievement, pk)
 
-@login_required
+#@login_required
 def course_new(request):
     return cv_new(request, CourseForm)
 
-@login_required
+#@login_required
 def course_remove(request, pk):
     return cv_remove(request, Course, pk)
 
