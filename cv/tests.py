@@ -57,6 +57,18 @@ class SharedPagesTest(object):
         self.assertIn(data[0]['title'], response.content.decode())
         self.assertIn(data[1]['title'], response.content.decode())
 
+    def test_deletes_items_correctly(self):
+        data = self.data
+
+        self._ModelUsed.objects.create(**data[0])
+        self._ModelUsed.objects.create(**data[1])
+
+        response = self.client.get(self.delete_url + '1/')
+        response = self.client.get('/cv/')
+
+        self.assertNotIn(data[0]['title'], response.content.decode())
+        self.assertIn(data[1]['title'], response.content.decode())
+
 class SkillPagesTest(TestCase, SharedPagesTest):
 
     _ModelUsed = Skill
