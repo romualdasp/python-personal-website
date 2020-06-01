@@ -113,58 +113,51 @@ class CoursePagesTest(TestCase, SharedPagesTest):
         {'title': 'NiceCourse1'},
         {'title': 'NiceCourse2'}]
 
-class SkillModelTest(TestCase):
 
-    def test_saving_and_retrieving_skills(self):
-        Skill.objects.create(title='The first skill')
-        Skill.objects.create(title='The second skill')
+class SharedModelTest(object):
 
-        saved_skills = Skill.objects.all()
-        self.assertEqual(saved_skills.count(), 2)
+    # these variables must be overridden by the child classes
+    _ModelUsed = None
+    data = []
+    
+    def test_saving_and_retrieving(self):
+        data = self.data
 
-        self.assertEqual(saved_skills[0].title, 'The first skill')
-        self.assertEqual(saved_skills[1].title, 'The second skill')
+        for i in range(len(data)):
+            self._ModelUsed.objects.create(**data[i])
 
-class EducationModelTest(TestCase):
+        saved = self._ModelUsed.objects.all()
+        self.assertEqual(saved.count(), len(data))
 
-    def test_saving_and_retrieving_educations(self):
-        Education.objects.create(title='The first education', date='2018', description='first')
-        Education.objects.create(title='The second education', date='2020', description='second')
+        for i in range(len(data)):
+            for key in data[i]:
+                actual = getattr(saved[i], key)
+                expected = data[i][key]
+                self.assertEqual(actual, expected)
 
-        saved_educations = Education.objects.all()
-        self.assertEqual(saved_educations.count(), 2)
+class SkillModelTest(TestCase, SharedModelTest):
 
-        self.assertEqual(saved_educations[0].title, 'The first education')
-        self.assertEqual(saved_educations[0].date, '2018')
-        self.assertEqual(saved_educations[0].description, 'first')
+    _ModelUsed = Skill
+    data = [{'title': 'The first skill'}, {'title': 'The second skill'}]
 
-        self.assertEqual(saved_educations[1].title, 'The second education')
-        self.assertEqual(saved_educations[1].date, '2020')
-        self.assertEqual(saved_educations[1].description, 'second')
+class EducationModelTest(TestCase, SharedModelTest):
 
-class AchievementModelTest(TestCase):
+    _ModelUsed = Education
+    data = [
+        {'title': 'The first education', 'date': '2018', 'description': 'first'},
+        {'title': 'The second education', 'date': '2020', 'description': 'second'}]
 
-    def test_saving_and_retrieving_achievements(self):
-        Achievement.objects.create(title='The first achievement', date='2016')
-        Achievement.objects.create(title='The second achievement', date='2019')
 
-        saved_achievements = Achievement.objects.all()
-        self.assertEqual(saved_achievements.count(), 2)
+class AchievementModelTest(TestCase, SharedModelTest):
 
-        self.assertEqual(saved_achievements[0].title, 'The first achievement')
-        self.assertEqual(saved_achievements[0].date, '2016')
+    _ModelUsed = Achievement
+    data = [
+        {'title': 'The first achievement', 'date': '2016'},
+        {'title': 'The second achievement', 'date': '2019'}]
 
-        self.assertEqual(saved_achievements[1].title, 'The second achievement')
-        self.assertEqual(saved_achievements[1].date, '2019')
+class CourseModelTest(TestCase, SharedModelTest):
 
-class CourseModelTest(TestCase):
-
-    def test_saving_and_retrieving_achievements(self):
-        Course.objects.create(title='The first course')
-        Course.objects.create(title='The second course')
-
-        saved_courses = Course.objects.all()
-        self.assertEqual(saved_courses.count(), 2)
-
-        self.assertEqual(saved_courses[0].title, 'The first course')
-        self.assertEqual(saved_courses[1].title, 'The second course')
+    _ModelUsed = Course
+    data = [
+        {'title': 'The first course'},
+        {'title': 'The second course'}]
