@@ -21,6 +21,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn(item, [li.text for li in list_items])
 
     def test_can_add_to_skill_list_and_retrieve_it_later(self):
+        self.fail('URLs in this test require login. Please remove @login_required in views.py :)')
+
         # Open homepage
         self.browser.get(self.live_server_url + '/cv/')
 
