@@ -15,10 +15,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def check_for_li_in_skill_list(self, li_text):
-        ul = self.browser.find_element_by_id('skill-list')
+    def check_for_item_in_list(self, item, list):
+        ul = self.browser.find_element_by_id(list)
         list_items = ul.find_elements_by_tag_name('li')
-        self.assertIn(li_text, [li.text for li in list_items])
+        self.assertIn(item, [li.text for li in list_items])
 
     def test_can_add_to_skill_list_and_retrieve_it_later(self):
         # Open homepage
@@ -27,36 +27,42 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Check the page title
         self.assertIn('Rmlds | Personal Website | University Coursework', self.browser.title)
 
-        # Check the header
-        header_text = self.browser.find_element_by_class_name('cv-title').text
-        self.assertIn('Personal CV', header_text)
+        # Check all headers exist
+        headers = self.browser.find_elements_by_class_name('cv-title')
+        self.assertIn('Skills', [h.text for h in headers])
+        self.assertIn('Education', [h.text for h in headers])
+        self.assertIn('Achievements', [h.text for h in headers])
+        self.assertIn('Courses', [h.text for h in headers])
 
-        # We are invited to enter a skill straight away
-        inputbox = self.browser.find_element_by_id('new-skill')
-        self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Enter a new skill'
-        )
+        # We click a button to enter a new skill
+        add_skill = self.browser.find_element_by_id('add-skill')
+        add_skill.click()
+        time.sleep(2)
 
         # We type 'Communication'
+        inputbox = self.browser.find_element_by_id('id_title')
         inputbox.send_keys('Communication')
 
-        # When we hit enter, the page updates, and now the page lists
+        # When we hit enter, the page redirects, and now it lists
         # 'Communication' as an item in a skill list
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(3)
+        time.sleep(2)
 
-        self.check_for_li_in_skill_list('Communication')
+        self.check_for_item_in_list('Communication', 'skill-list')
 
-        # We see a text box inviting us to add another item.
-        # We enter 'Presentation'
-        inputbox = self.browser.find_element_by_id('new-skill')
+        # We click a button to add another item
+        add_skill = self.browser.find_element_by_id('add-skill')
+        add_skill.click()
+        time.sleep(2)
+
+        # We type 'Presentation' and hit enter
+        inputbox = self.browser.find_element_by_id('id_title')
         inputbox.send_keys('Presentation')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(3)
+        time.sleep(2)
 
-        # The page updates again, and now shows both items in the list
-        self.check_for_li_in_skill_list('Communication')
-        self.check_for_li_in_skill_list('Presentation')
+        # The page redirects, and now shows both items in the list
+        self.check_for_item_in_list('Communication', 'skill-list')
+        self.check_for_item_in_list('Presentation', 'skill-list')
 
-        self.fail('Finish the test!')
+        self.fail('YAY everything works!')

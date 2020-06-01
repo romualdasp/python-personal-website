@@ -30,12 +30,12 @@
         {% endfor %}
     </ul>
 
-    {% if user.is_authenticated %}
-        <a class="btn btn-default" href="{% url 'skill_new' %}">Add skill</a>
-        <a class="btn btn-default" href="{% url 'education_new' %}">Add education</a>
-        <a class="btn btn-default" href="{% url 'achievement_new' %}">Add achievement</a>
-        <a class="btn btn-default" href="{% url 'course_new' %}">Add course</a>
-    {% endif %}
+    <a class="btn btn-default" href="{% url 'skill_new' %}" id="add-skill">Add skill</a>
+    <a class="btn btn-default" href="{% url 'education_new' %}">Add education</a>
+    <a class="btn btn-default" href="{% url 'achievement_new' %}">Add achievement</a>
+    <a class="btn btn-default" href="{% url 'course_new' %}">Add course</a>
+
+    {% if user.is_authenticated %}{% endif %}
 
     <img src="/static/images/none.jpg" alt="none" style="max-width: 100%;">
 
