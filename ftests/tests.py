@@ -10,7 +10,7 @@ geckodriver_path = r'C:\Users\Romas\geckodriver\geckodriver.exe'
 
 class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
-        # self.fail('URLs in this class require login. Please remove @login_required in views.py :)')
+        self.fail('URLs in this class require login. Please remove @login_required in views.py :)')
         self.browser = webdriver.Firefox(executable_path=geckodriver_path)
 
     def tearDown(self):

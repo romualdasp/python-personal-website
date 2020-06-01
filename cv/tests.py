@@ -113,7 +113,8 @@ class CoursePagesTest(TestCase, SharedPagesTest):
         {'title': 'NiceCourse1'},
         {'title': 'NiceCourse2'}]
 
-
+# This class wont be executed by the test runner
+# It is used to share tests
 class SharedModelTest(object):
 
     # these variables must be overridden by the child classes
