@@ -7,40 +7,99 @@ from cv.models import Skill, Education, Achievement, Course
 
 # Create your tests here.
 
-class SkillPagesTest(TestCase):
+# This class wont be executed by the test runner
+# It is used to share tests
+class SharedPagesTest(object):
 
+    # these variables must be overridden by the child classes
+    _ModelUsed = None
+
+    create_url = '/unset/'
+    delete_url = '/unset/'
+
+    data = []
+    
     def test_uses_correct_template(self):
-        response = self.client.get('/cv/skill/new/')
+        response = self.client.get(self.create_url)
         self.assertTemplateUsed(response, 'cv/cv_new.html')
 
     def test_saves_POST_request(self):
-        response = self.client.post('/cv/skill/new/', data={
-            'title': 'saves_POST_request'
-        })
+        data = self.data
 
-        self.assertEqual(Skill.objects.count(), 1)
-        self.assertEqual(Skill.objects.first().title, 'saves_POST_request')
+        response = self.client.post(self.create_url, data[0])
+
+        self.assertEqual(self._ModelUsed.objects.count(), 1)
+        for key in data[0]:
+            actual = getattr(self._ModelUsed.objects.first(), key)
+            expected = data[0][key]
+            self.assertEqual(actual, expected)
 
     def test_redirects_after_POST(self):
-        response = self.client.post('/cv/skill/new/', data={
-            'title': 'redirects_after_POST'
-        })
+        data = self.data
+
+        response = self.client.post(self.create_url, data[0])
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/cv/')
 
     def test_only_saves_items_when_necessary(self):
-        self.client.get('/cv/skill/new/')
-        self.assertEqual(Skill.objects.count(), 0)
+        self.client.get(self.create_url)
+        self.assertEqual(self._ModelUsed.objects.count(), 0)
 
     def test_displays_all_items(self):
-        Skill.objects.create(title='displays_all_items 1')
-        Skill.objects.create(title='displays_all_items 2')
+        data = self.data
+
+        self._ModelUsed.objects.create(**data[0])
+        self._ModelUsed.objects.create(**data[1])
 
         response = self.client.get('/cv/')
 
-        self.assertIn('displays_all_items 1', response.content.decode())
-        self.assertIn('displays_all_items 2', response.content.decode())
+        self.assertIn(data[0]['title'], response.content.decode())
+        self.assertIn(data[1]['title'], response.content.decode())
+
+class SkillPagesTest(TestCase, SharedPagesTest):
+
+    _ModelUsed = Skill
+
+    create_url = '/cv/skill/new/'
+    delete_url = '/cv/skill/remove/'
+
+    data = [
+        {'title': 'GreatSkill1'},
+        {'title': 'GreatSkill2'}]
+
+class EducationPagesTest(TestCase, SharedPagesTest):
+
+    _ModelUsed = Education
+
+    create_url = '/cv/education/new/'
+    delete_url = '/cv/education/remove/'
+
+    data = [
+        {'title': 'TheEducation1', 'date': '2019', 'description': 'education1'},
+        {'title': 'TheEducation2', 'date': '2018', 'description': 'education2'}]
+
+class AchievementPagesTest(TestCase, SharedPagesTest):
+
+    _ModelUsed = Achievement
+
+    create_url = '/cv/achievement/new/'
+    delete_url = '/cv/achievement/remove/'
+
+    data = [
+        {'title': 'NiceAchievement1', 'date': '2020'},
+        {'title': 'NiceAchievement2', 'date': '2019'}]
+
+class CoursePagesTest(TestCase, SharedPagesTest):
+
+    _ModelUsed = Course
+
+    create_url = '/cv/course/new/'
+    delete_url = '/cv/course/remove/'
+
+    data = [
+        {'title': 'NiceCourse1'},
+        {'title': 'NiceCourse2'}]
 
 class SkillModelTest(TestCase):
 
@@ -53,49 +112,6 @@ class SkillModelTest(TestCase):
 
         self.assertEqual(saved_skills[0].title, 'The first skill')
         self.assertEqual(saved_skills[1].title, 'The second skill')
-
-class EducationPagesTest(TestCase):
-
-    def test_uses_correct_template(self):
-        response = self.client.get('/cv/education/new/')
-        self.assertTemplateUsed(response, 'cv/cv_new.html')
-
-    def test_saves_POST_request(self):
-        response = self.client.post('/cv/education/new/', data={
-            'title': 'saves_POST_request title',
-            'date': 'saves_POST_request date',
-            'description': 'saves_POST_request desc',
-        })
-
-        self.assertEqual(Education.objects.count(), 1)
-
-        saved = Education.objects.first()
-        self.assertEqual(saved.title, 'saves_POST_request title')
-        self.assertEqual(saved.date, 'saves_POST_request date')
-        self.assertEqual(saved.description, 'saves_POST_request desc')
-
-    def test_redirects_after_POST(self):
-        response = self.client.post('/cv/education/new/', data={
-            'title': 'redirects_after_POST title',
-            'date': 'redirects_after_POST date',
-            'description': 'redirects_after_POST desc',
-        })
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/cv/')
-
-    def test_only_saves_items_when_necessary(self):
-        self.client.get('/cv/education/new/')
-        self.assertEqual(Education.objects.count(), 0)
-
-    def test_displays_all_items(self):
-        Education.objects.create(title='displays_all_items 1', date=2010, description='desc 1')
-        Education.objects.create(title='displays_all_items 2', date=2012, description='desc 2')
-
-        response = self.client.get('/cv/')
-
-        self.assertIn('displays_all_items 1', response.content.decode())
-        self.assertIn('displays_all_items 2', response.content.decode())
 
 class EducationModelTest(TestCase):
 
@@ -114,46 +130,6 @@ class EducationModelTest(TestCase):
         self.assertEqual(saved_educations[1].date, '2020')
         self.assertEqual(saved_educations[1].description, 'second')
 
-class AchievementPagesTest(TestCase):
-
-    def test_uses_correct_template(self):
-        response = self.client.get('/cv/achievement/new/')
-        self.assertTemplateUsed(response, 'cv/cv_new.html')
-
-    def test_saves_POST_request(self):
-        response = self.client.post('/cv/achievement/new/', data={
-            'title': 'saves_POST_request title',
-            'date': 'saves_POST_request date',
-        })
-
-        self.assertEqual(Achievement.objects.count(), 1)
-
-        saved = Achievement.objects.first()
-        self.assertEqual(saved.title, 'saves_POST_request title')
-        self.assertEqual(saved.date, 'saves_POST_request date')
-
-    def test_redirects_after_POST(self):
-        response = self.client.post('/cv/achievement/new/', data={
-            'title': 'redirects_after_POST title',
-            'date': 'redirects_after_POST date',
-        })
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/cv/')
-
-    def test_only_saves_items_when_necessary(self):
-        self.client.get('/cv/achievement/new/')
-        self.assertEqual(Achievement.objects.count(), 0)
-
-    def test_displays_all_items(self):
-        Achievement.objects.create(title='displays_all_items 1', date=2015)
-        Achievement.objects.create(title='displays_all_items 2', date=2016)
-
-        response = self.client.get('/cv/')
-
-        self.assertIn('displays_all_items 1', response.content.decode())
-        self.assertIn('displays_all_items 2', response.content.decode())
-
 class AchievementModelTest(TestCase):
 
     def test_saving_and_retrieving_achievements(self):
@@ -168,43 +144,6 @@ class AchievementModelTest(TestCase):
 
         self.assertEqual(saved_achievements[1].title, 'The second achievement')
         self.assertEqual(saved_achievements[1].date, '2019')
-
-class CoursePagesTest(TestCase):
-
-    def test_uses_correct_template(self):
-        response = self.client.get('/cv/course/new/')
-        self.assertTemplateUsed(response, 'cv/cv_new.html')
-
-    def test_saves_POST_request(self):
-        response = self.client.post('/cv/course/new/', data={
-            'title': 'saves_POST_request title',
-        })
-
-        self.assertEqual(Course.objects.count(), 1)
-
-        saved = Course.objects.first()
-        self.assertEqual(saved.title, 'saves_POST_request title')
-
-    def test_redirects_after_POST(self):
-        response = self.client.post('/cv/course/new/', data={
-            'title': 'redirects_after_POST title',
-        })
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/cv/')
-
-    def test_only_saves_items_when_necessary(self):
-        self.client.get('/cv/course/new/')
-        self.assertEqual(Course.objects.count(), 0)
-
-    def test_displays_all_items(self):
-        Course.objects.create(title='displays_all_items 1')
-        Course.objects.create(title='displays_all_items 2')
-
-        response = self.client.get('/cv/')
-
-        self.assertIn('displays_all_items 1', response.content.decode())
-        self.assertIn('displays_all_items 2', response.content.decode())
 
 class CourseModelTest(TestCase):
 
